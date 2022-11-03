@@ -29,6 +29,4 @@ public class Curso {
     @Enumerated(value = EnumType.STRING)
     private SituacaoCurso situacaoCurso;
 
-    @Embedded
-    private Inscricao inscricao;
 }
