@@ -1,13 +1,13 @@
 package com.io.github.msj.mscurso.enums;
 
-public enum SituacaoCurso {
+public enum SituacaoInscricao {
 
     EM_ANDAMENTO("Em andamento"),
     FINALIZADO("Finalizado");
 
     private String situacao;
 
-    SituacaoCurso(String situacao) {
+    SituacaoInscricao(String situacao) {
         this.situacao = situacao;
     }
 

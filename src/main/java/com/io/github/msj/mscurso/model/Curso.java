@@ -1,6 +1,6 @@
 package com.io.github.msj.mscurso.model;
 
-import com.io.github.msj.mscurso.enums.SituacaoCurso;
+import com.io.github.msj.mscurso.enums.SituacaoInscricao;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -23,10 +24,10 @@ public class Curso {
     @NotEmpty(message = "É necessário informar o nome.")
     private String nome;
 
-    @NotEmpty(message = "É necessário informar o número de vagas.")
+    @NotNull(message = "É necessário informar o número de vagas.")
     private Integer numeroVagas;
 
     @Enumerated(value = EnumType.STRING)
-    private SituacaoCurso situacaoCurso;
+    private SituacaoInscricao situacaoInscricao;
 
 }
