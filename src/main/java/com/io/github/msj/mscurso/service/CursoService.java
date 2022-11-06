@@ -12,4 +12,6 @@ public interface CursoService {
 
     CursoSalvoResponseDTO salvar(CursoRequestDTO cursoRequestDTO);
 
+    Integer quantidadeDeVagas();
+
 }

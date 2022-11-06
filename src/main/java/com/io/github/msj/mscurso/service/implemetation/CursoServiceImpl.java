@@ -41,6 +41,11 @@ public class CursoServiceImpl implements CursoService {
         return responseDTO;
     }
 
+    @Override
+    public Integer quantidadeDeVagas() {
+        return cursoRepository.findByNumeroVagas();
+    }
+
     private void defineSituacaoInscricao(Curso curso) {
         if (curso.getSituacaoInscricao() == null) {
             curso.setSituacaoInscricao(SituacaoInscricao.EM_ANDAMENTO);
