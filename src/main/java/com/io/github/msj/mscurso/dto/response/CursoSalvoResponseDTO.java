@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CursoSalvoResponseDTO {
 
-    private Integer idCurso;
+    private Long idCurso;
 
     private String mensagem;
 }

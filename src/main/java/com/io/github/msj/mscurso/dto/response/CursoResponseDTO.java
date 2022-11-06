@@ -1,6 +1,7 @@
 package com.io.github.msj.mscurso.dto.response;
 
 
+import com.io.github.msj.mscurso.enums.SituacaoInscricao;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CursoResponseDTO {
 
-    private Integer idCurso;
+    private Long idCurso;
 
-    private String nomeCurso;
+    private String nome;
 
-    private String situacaoInscricao;
+    private SituacaoInscricao situacaoInscricao;
 }

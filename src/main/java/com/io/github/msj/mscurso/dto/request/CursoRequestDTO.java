@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CursoRequestDTO {
 
-    private String nomeCurso;
+    private String nome;
 
     private Integer numeroVagas;
 
