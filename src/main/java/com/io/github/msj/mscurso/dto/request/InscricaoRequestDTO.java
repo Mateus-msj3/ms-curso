@@ -15,7 +15,7 @@ public class InscricaoRequestDTO {
 
     private Integer idCurso;
 
-    private Integer cpf;
+    private String cpf;
 
     private BigDecimal nota;
 

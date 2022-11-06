@@ -1,5 +1,6 @@
 package com.io.github.msj.mscurso.dto.response;
 
+import com.io.github.msj.mscurso.enums.Situacao;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,11 +14,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class InscricaoFinalizadaResponseDTO {
 
-    private Integer cpf;
+    private String cpf;
 
     private BigDecimal nota;
 
-    private String situacao;
+    private Situacao situacao;
 
 }
 

@@ -1,14 +1,11 @@
 package com.io.github.msj.mscurso.service.implemetation;
 
-import com.io.github.msj.mscurso.dto.request.CursoRequestDTO;
 import com.io.github.msj.mscurso.dto.request.InscricaoRequestDTO;
-import com.io.github.msj.mscurso.dto.response.*;
+import com.io.github.msj.mscurso.dto.response.InscricaoCursoResponseDTO;
+import com.io.github.msj.mscurso.dto.response.InscricaoFinalizadaResponseDTO;
+import com.io.github.msj.mscurso.dto.response.InscricaoMensagemResponseDTO;
 import com.io.github.msj.mscurso.enums.Situacao;
-import com.io.github.msj.mscurso.enums.SituacaoInscricao;
-import com.io.github.msj.mscurso.exception.NegocioException;
-import com.io.github.msj.mscurso.model.Curso;
 import com.io.github.msj.mscurso.model.Inscricao;
-import com.io.github.msj.mscurso.repository.CursoRepository;
 import com.io.github.msj.mscurso.repository.InscricaoRepository;
 import com.io.github.msj.mscurso.service.CursoService;
 import com.io.github.msj.mscurso.service.InscricaoService;
@@ -16,8 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,52 +34,63 @@ public class InscricaoServiceImpl implements InscricaoService {
     @Override
     public InscricaoMensagemResponseDTO salvar(InscricaoRequestDTO inscricaoRequestDTO) {
         Inscricao inscricaoRequest = modelMapper.map(inscricaoRequestDTO, Inscricao.class);
-        Inscricao inscricao = inscricaoRepository.save(inscricaoRequest);
-        InscricaoMensagemResponseDTO inscricaoMensagemResponseDTO = modelMapper.map(inscricao, InscricaoMensagemResponseDTO.class);
-        inscricaoMensagemResponseDTO.setMensagem("Inscrição realizada com sucesso.");
-        return inscricaoMensagemResponseDTO;
+        inscricaoRepository.save(inscricaoRequest);
+        return new InscricaoMensagemResponseDTO("Inscrição realizada com sucesso.");
     }
 
     @Override
     public InscricaoMensagemResponseDTO finalizar(Long idCurso) {
-
+        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
         Integer numeroVagasCurso = cursoService.quantidadeDeVagas();
 
-        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
-
-        // Se a lista encontrada é menor ou igual ao numero de vagas já adiciona todos como selecionado
         if (inscricoesEncontradas.size() <= numeroVagasCurso) {
-            for (Inscricao inscricoesEncontrada : inscricoesEncontradas) {
-                inscricoesEncontrada.setSituacao(Situacao.SELECIONADO);
-                inscricaoRepository.save(inscricoesEncontrada);
-            }
-            return new InscricaoMensagemResponseDTO("Inscrição finalizada com sucesso.");
+            return selecionarInscritos(inscricoesEncontradas);
         } else {
-            //Ordena a Lista com as maiores notas
-            inscricoesEncontradas.sort(Comparator.comparing(Inscricao::getNota));
-
-            for (Inscricao inscricoesEncontrada : inscricoesEncontradas) {
-                if (inscricoesEncontradas.size() <= numeroVagasCurso) {
-                    inscricoesEncontrada.setSituacao(Situacao.SELECIONADO);
-                    inscricaoRepository.save(inscricoesEncontrada);
-                }else {
-                    inscricoesEncontrada.setSituacao(Situacao.NAO_SELECIONADO);
-                    inscricaoRepository.save(inscricoesEncontrada);
-                }
-
-
-            }
-            return new InscricaoMensagemResponseDTO("Inscrição finalizada com sucesso.");
+            return selecionarInscritosPorNotas(inscricoesEncontradas, numeroVagasCurso);
         }
     }
 
     @Override
     public List<InscricaoCursoResponseDTO> listarPorIdCurso(Long idCurso) {
-        return null;
+        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
+        return inscricoesEncontradas.stream()
+                .map(inscricao -> modelMapper.map(inscricao, InscricaoCursoResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<InscricaoFinalizadaResponseDTO> inscritosFinalizados(Long idCurso) {
-        return null;
+        List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
+        List<InscricaoFinalizadaResponseDTO> retorno = new ArrayList<>();
+        for (Inscricao inscricao : inscricoesEncontradas){
+            if (inscricao.getSituacao().equals(Situacao.SELECIONADO)) {
+                InscricaoFinalizadaResponseDTO inscricaoFinalizadaResponseDTO = modelMapper.map(inscricao, InscricaoFinalizadaResponseDTO.class);
+                retorno.add(inscricaoFinalizadaResponseDTO);
+            }
+        }
+        return retorno;
+    }
+
+    private InscricaoMensagemResponseDTO selecionarInscritos(List<Inscricao> inscricoes) {
+        for (Inscricao inscricao : inscricoes) {
+            inscricao.setSituacao(Situacao.SELECIONADO);
+            inscricaoRepository.save(inscricao);
+        }
+        return new InscricaoMensagemResponseDTO("Inscrição finalizada com sucesso.");
+    }
+
+    private InscricaoMensagemResponseDTO selecionarInscritosPorNotas(List<Inscricao> inscricoes, Integer numeroVagas) {
+        inscricoes.sort(Comparator.comparing(Inscricao::getNota).reversed());
+
+        for (int i = 0; i < inscricoes.size(); i++) {
+            if (i < numeroVagas) {
+                inscricoes.get(i).setSituacao(Situacao.SELECIONADO);
+                inscricaoRepository.save(inscricoes.get(i));
+            } else {
+                inscricoes.get(i).setSituacao(Situacao.NAO_SELECIONADO);
+                inscricaoRepository.save(inscricoes.get(i));
+            }
+        }
+        return new InscricaoMensagemResponseDTO("Inscrição finalizada com sucesso.");
     }
 }

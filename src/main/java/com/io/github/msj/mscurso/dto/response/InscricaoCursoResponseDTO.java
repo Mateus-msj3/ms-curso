@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class InscricaoCursoResponseDTO {
 
-    private Integer cpf;
+    private String cpf;
 
     private BigDecimal nota;
 
