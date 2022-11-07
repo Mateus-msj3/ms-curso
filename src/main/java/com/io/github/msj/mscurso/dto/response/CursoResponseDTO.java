@@ -17,5 +17,7 @@ public class CursoResponseDTO {
 
     private String nome;
 
+    private Integer numeroVagas;
+
     private SituacaoInscricao situacaoInscricao;
 }

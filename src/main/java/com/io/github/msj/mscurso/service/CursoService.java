@@ -10,8 +10,8 @@ public interface CursoService {
 
     List<CursoResponseDTO> listarTodos();
 
-    CursoSalvoResponseDTO salvar(CursoRequestDTO cursoRequestDTO);
+    CursoResponseDTO listarPorId(Long id);
 
-    Integer quantidadeDeVagas();
+    CursoSalvoResponseDTO salvar(CursoRequestDTO cursoRequestDTO);
 
 }

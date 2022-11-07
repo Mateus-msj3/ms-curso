@@ -24,6 +24,11 @@ public class CursoController {
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CursoResponseDTO> listarPorId(@PathVariable Long id) {
+        CursoResponseDTO cursoResponseDTO = cursoService.listarPorId(id);
+        return ResponseEntity.ok().body(cursoResponseDTO);
+    }
 
     @PostMapping("/salvar")
     public ResponseEntity<CursoSalvoResponseDTO> salvar(@RequestBody @Valid CursoRequestDTO cursoRequestDTO) {

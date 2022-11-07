@@ -4,6 +4,7 @@ import com.io.github.msj.mscurso.dto.request.CursoRequestDTO;
 import com.io.github.msj.mscurso.dto.response.CursoResponseDTO;
 import com.io.github.msj.mscurso.dto.response.CursoSalvoResponseDTO;
 import com.io.github.msj.mscurso.enums.SituacaoInscricao;
+import com.io.github.msj.mscurso.exception.NegocioException;
 import com.io.github.msj.mscurso.model.Curso;
 import com.io.github.msj.mscurso.repository.CursoRepository;
 import com.io.github.msj.mscurso.service.CursoService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +34,13 @@ public class CursoServiceImpl implements CursoService {
     }
 
     @Override
+    public CursoResponseDTO listarPorId(Long id) {
+        Optional<Curso> pessoa = Optional.of(cursoRepository.findById(id)).orElseThrow(() -> new NegocioException("Curso não encontrado"));
+        CursoResponseDTO cursoResponseDTO = modelMapper.map(pessoa.get(), CursoResponseDTO.class);
+        return cursoResponseDTO;
+    }
+
+    @Override
     public CursoSalvoResponseDTO salvar(CursoRequestDTO cursoRequestDTO) {
         Curso cursoRequest = modelMapper.map(cursoRequestDTO, Curso.class);
         defineSituacaoInscricao(cursoRequest);
@@ -39,11 +48,6 @@ public class CursoServiceImpl implements CursoService {
         CursoSalvoResponseDTO responseDTO = modelMapper.map(curso, CursoSalvoResponseDTO.class);
         responseDTO.setMensagem("Curso salvo com sucesso!");
         return responseDTO;
-    }
-
-    @Override
-    public Integer quantidadeDeVagas() {
-        return cursoRepository.findByNumeroVagas();
     }
 
     private void defineSituacaoInscricao(Curso curso) {

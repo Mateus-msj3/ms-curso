@@ -41,7 +41,7 @@ public class InscricaoServiceImpl implements InscricaoService {
     @Override
     public InscricaoMensagemResponseDTO finalizar(Long idCurso) {
         List<Inscricao> inscricoesEncontradas = inscricaoRepository.findByIdCurso(idCurso);
-        Integer numeroVagasCurso = cursoService.quantidadeDeVagas();
+        Integer numeroVagasCurso = 1;//cursoService.quantidadeDeVagas();
 
         if (inscricoesEncontradas.size() <= numeroVagasCurso) {
             return selecionarInscritos(inscricoesEncontradas);
