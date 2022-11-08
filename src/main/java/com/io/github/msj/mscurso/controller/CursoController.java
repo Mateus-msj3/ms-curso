@@ -18,8 +18,8 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
 
-    @GetMapping
-    public ResponseEntity<List<CursoResponseDTO>> listarTodos() {
+        @GetMapping
+        public ResponseEntity<List<CursoResponseDTO>> listarTodos() {
         List<CursoResponseDTO> list = cursoService.listarTodos();
         return ResponseEntity.ok().body(list);
     }
