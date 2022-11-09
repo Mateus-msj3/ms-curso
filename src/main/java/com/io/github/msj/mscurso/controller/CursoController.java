@@ -38,7 +38,7 @@ public class CursoController {
         return ResponseEntity.ok().body(cursoSalvoResponseDTO);
     }
 
-    @PatchMapping("/editar/{idCurso}")
+    @PutMapping("/editar/{idCurso}")
     public ResponseEntity<CursoSituacaoInscricaoResponseDTO> atualizarSituacaoInscricao(@PathVariable Long idCurso, @RequestBody CursoSituacaoInscricaoRequestDTO cursoSituacaoInscricaoRequestDTO) {
         CursoSituacaoInscricaoResponseDTO cursoSituacaoInscricaoResponseDTO = cursoService.editarSituacaoInscricao(idCurso, cursoSituacaoInscricaoRequestDTO);
         return ResponseEntity.ok().body(cursoSituacaoInscricaoResponseDTO);
