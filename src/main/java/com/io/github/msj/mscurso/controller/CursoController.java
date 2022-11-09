@@ -1,8 +1,10 @@
 package com.io.github.msj.mscurso.controller;
 
 import com.io.github.msj.mscurso.dto.request.CursoRequestDTO;
+import com.io.github.msj.mscurso.dto.request.CursoSituacaoInscricaoRequestDTO;
 import com.io.github.msj.mscurso.dto.response.CursoResponseDTO;
 import com.io.github.msj.mscurso.dto.response.CursoSalvoResponseDTO;
+import com.io.github.msj.mscurso.dto.response.CursoSituacaoInscricaoResponseDTO;
 import com.io.github.msj.mscurso.service.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +38,10 @@ public class CursoController {
         return ResponseEntity.ok().body(cursoSalvoResponseDTO);
     }
 
+    @PatchMapping("/editar/{idCurso}")
+    public ResponseEntity<CursoSituacaoInscricaoResponseDTO> atualizarSituacaoInscricao(@PathVariable Long idCurso, @RequestBody CursoSituacaoInscricaoRequestDTO cursoSituacaoInscricaoRequestDTO) {
+        CursoSituacaoInscricaoResponseDTO cursoSituacaoInscricaoResponseDTO = cursoService.editarSituacaoInscricao(idCurso, cursoSituacaoInscricaoRequestDTO);
+        return ResponseEntity.ok().body(cursoSituacaoInscricaoResponseDTO);
+    }
 
 }
