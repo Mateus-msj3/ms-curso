@@ -80,18 +80,4 @@ public class CursoServiceTest {
         assertEquals(retorno.getMensagem(), "Curso salvo com sucesso!");
     }
 
-
-
-    @Test
-    @DisplayName("Deve listar os inscritos com situação selecionado")
-    public void quantidadeDeVagas(){
-
-        when(cursoRepository.findByNumeroVagas()).thenReturn(10);
-
-        Integer retorno = cursoService.quantidadeDeVagas();
-
-        assertNotNull(retorno, "Verfica se o retorno é diferente de null");
-
-        assertEquals(retorno.equals(10), true);
-    }
 }
